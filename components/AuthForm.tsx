@@ -8,11 +8,12 @@ import {
   Text,
 } from 'react-native'
 import Input from './Input'
+import UserService from "../services/authentification.service"
+
 
 interface ClassStateType {
   email:string,
   password:string
-  tabLogin: Array<string>
 }
 
 const tabRightLogin = ['Petit.comkoala@ensc.fr', 'Mdpnoala']
@@ -21,7 +22,6 @@ export default class AuthForm extends Component<{}, ClassStateType> {
   constructor(public props: {}) {
     super(props)
     this.state = {
-      tabLogin: [],
       email:'',
       password:''
     }
@@ -58,7 +58,7 @@ export default class AuthForm extends Component<{}, ClassStateType> {
         />
         <TouchableOpacity
           style={styles.connexionButton}
-          onPress={() => this.state.email === tabRightLogin[0] && this.state.password ===tabRightLogin[1]? 
+          onPress={() => UserService.authenticate(this.state.email,this.state.password) ? 
             this.dispAlert(
               "Connexion réussie"
             ):this.dispAlert("Identifiants erronés")
