@@ -10,23 +10,33 @@ import {
 import Input from './Input'
 
 interface ClassStateType {
-  tabLogin : Array<string>
+  email:string,
+  password:string
+  tabLogin: Array<string>
 }
 
-export default class AuthForm extends Component<{},ClassStateType> {
-  constructor(public props: {}){
-    super(props);
-    this.state={
-      tabLogin:[],
+const tabRightLogin = ['Petit.comkoala@ensc.fr', 'Mdpnoala']
+
+export default class AuthForm extends Component<{}, ClassStateType> {
+  constructor(public props: {}) {
+    super(props)
+    this.state = {
+      tabLogin: [],
+      email:'',
+      password:''
     }
   }
+
   dispAlert = (text: string) => {
     Alert.alert('Action sélectionnée', text)
   }
 
-  changeLoginInformations = (value:string )=>{
-    let newLoginInformations = [...this.state.tabLogin,value]
-    this.setState({tabLogin:newLoginInformations})
+
+  changeEmail = (value:string)=>{
+    this.setState({email:value})
+  }
+  changePassword = (value:string)=>{
+    this.setState({password:value})
   }
 
   render() {
@@ -36,17 +46,21 @@ export default class AuthForm extends Component<{},ClassStateType> {
           style={{ width: 96, height: 96 }}
           source={require('../assets/koala.png')}
         />
-        <Input placeHolder="Email" image={require('../assets/arobase.png')} handleChange ={this.changeLoginInformations}/>
+        <Input
+          placeHolder="Email"
+          image={require('../assets/arobase.png')}
+          handleChange={this.changeEmail}
+        />
         <Input
           placeHolder="Mot de passe"
           image={require('../assets/key.png')}
-          handleChange ={this.changeLoginInformations}
+          handleChange={this.changePassword}
         />
         <TouchableOpacity
           style={styles.connexionButton}
           onPress={() =>
             this.dispAlert(
-              `${this.state.tabLogin[0]} && ${this.state.tabLogin[1]}`
+              `${this.state.email}&&  ${ this.state.password}`
             )
           }
         >
@@ -75,13 +89,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'skyblue',
     borderRadius: 30,
     width: 300,
-    height:50,
-    alignItems:'center',
-    justifyContent:'center'
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  text:{
-    color:'white',
-    fontSize:16,
- 
-  }
+  text: {
+    color: 'white',
+    fontSize: 16,
+  },
 })

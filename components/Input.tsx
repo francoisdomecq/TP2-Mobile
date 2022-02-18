@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image } from 'react-native'
+import { Image, ImageSourcePropType } from 'react-native'
 import {
   View,
   TextInput,
@@ -10,7 +10,7 @@ import {
 
 interface PropsType {
   placeHolder: String
-  image : string ,
+  image : ImageSourcePropType ,
   handleChange:Function
 }
 
@@ -32,7 +32,7 @@ export default class Input extends Component<PropsType> {
           <TextInput
             style={styles.textInput}
             placeholder={`${this.props.placeHolder}`}
-            onSubmitEditing={(Event) =>
+            onChange={(Event) =>
               this.props.handleChange(Event.nativeEvent.text)
             }
           />
