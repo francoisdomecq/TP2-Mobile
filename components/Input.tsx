@@ -10,7 +10,8 @@ import {
 
 interface PropsType {
   placeHolder: String
-  image : string 
+  image : string ,
+  handleChange:Function
 }
 
 
@@ -32,7 +33,7 @@ export default class Input extends Component<PropsType> {
             style={styles.textInput}
             placeholder={`${this.props.placeHolder}`}
             onSubmitEditing={(Event) =>
-              this.setState({ name: Event.nativeEvent.text })
+              this.props.handleChange(Event.nativeEvent.text)
             }
           />
         </View>

@@ -14,9 +14,21 @@ interface ClassStateType {
 }
 
 export default class AuthForm extends Component<{},ClassStateType> {
+  constructor(public props: {}){
+    super(props);
+    this.state={
+      tabLogin:[],
+    }
+  }
   dispAlert = (text: string) => {
     Alert.alert('Action sélectionnée', text)
   }
+
+  changeLoginInformations = (value:string )=>{
+    let newLoginInformations = [...this.state.tabLogin,value]
+    this.setState({tabLogin:newLoginInformations})
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -24,16 +36,17 @@ export default class AuthForm extends Component<{},ClassStateType> {
           style={{ width: 96, height: 96 }}
           source={require('../assets/koala.png')}
         />
-        <Input placeHolder="Email" image={require('../assets/arobase.png')} />
+        <Input placeHolder="Email" image={require('../assets/arobase.png')} handleChange ={this.changeLoginInformations}/>
         <Input
           placeHolder="Mot de passe"
           image={require('../assets/key.png')}
+          handleChange ={this.changeLoginInformations}
         />
         <TouchableOpacity
           style={styles.connexionButton}
           onPress={() =>
             this.dispAlert(
-              'Connexion avec le mail :Petit.comkoala@ensc.fr Mdp:noala'
+              `${this.state.tabLogin[0]} && ${this.state.tabLogin[1]}`
             )
           }
         >
