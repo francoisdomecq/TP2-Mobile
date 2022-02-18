@@ -58,10 +58,10 @@ export default class AuthForm extends Component<{}, ClassStateType> {
         />
         <TouchableOpacity
           style={styles.connexionButton}
-          onPress={() =>
+          onPress={() => this.state.email === tabRightLogin[0] && this.state.password ===tabRightLogin[1]? 
             this.dispAlert(
-              `${this.state.email}&&  ${ this.state.password}`
-            )
+              "Connexion réussie"
+            ):this.dispAlert("Identifiants erronés")
           }
         >
           <Text style={styles.text}>Se connecter</Text>
