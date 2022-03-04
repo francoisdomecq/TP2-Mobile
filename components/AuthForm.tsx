@@ -1,100 +1,110 @@
+import InputContainer from './Input'
 import React, { Component } from 'react'
-import {
-  Image,
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-  Text,
-} from 'react-native'
-import Input from './Input'
-import UserService from "../services/authentification.service"
+import { StyleSheet, View, TouchableOpacity, Text, Alert } from 'react-native'
+import UserService from '../services/authentification.service'
+import { User } from '../services/authentification.service'
 
-
-interface ClassStateType {
-  email:string,
-  password:string
+interface classState {
+  login: string
+  password: string
 }
 
-const tabRightLogin = ['Petit.comkoala@ensc.fr', 'Mdpnoala']
+interface classProps {
+  onConnection: Function
+}
 
-export default class AuthForm extends Component<{}, ClassStateType> {
-  constructor(public props: {}) {
+export default class AuthForm extends Component<classProps, classState> {
+  constructor(public props:classProps){
     super(props)
-    this.state = {
-      email:'',
+    this.state={
+      login:'',
       password:''
     }
   }
-
-  dispAlert = (text: string) => {
-    Alert.alert('Action sélectionnée', text)
+  state: classState = { login: '', password: '' }
+  displayAlert = (text: string) => {
+    Alert.alert('Action Sélectionnée', text)
+  }
+  sendForm = (info: string) => {
+    const user = UserService.authenticate(this.state.login, this.state.password)
+    if (user !== null) this.props.onConnection()
+    else this.displayAlert('Connexion avec le mail: ' + info)
+  }
+  changeLogin = (value: string) => {
+    this.setState({ login: value })
   }
 
-
-  changeEmail = (value:string)=>{
-    this.setState({email:value})
-  }
-  changePassword = (value:string)=>{
-    this.setState({password:value})
+  changePassword = (value: string) => {
+    this.setState({ password: value })
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        <Image
-          style={{ width: 96, height: 96 }}
-          source={require('../assets/koala.png')}
+      <View style={styles.form}>
+        <InputContainer
+          security={false}
+          textForm="email"
+          imagePath={require('../assets/at.png')}
+          modify={this.changeLogin}
         />
-        <Input
-          placeHolder="Email"
-          image={require('../assets/arobase.png')}
-          handleChange={this.changeEmail}
-        />
-        <Input
-          placeHolder="Mot de passe"
-          image={require('../assets/key.png')}
-          handleChange={this.changePassword}
+        <InputContainer
+          security={true}
+          textForm="mot de passe"
+          imagePath={require('../assets/key.png')}
+          modify={this.changePassword}
         />
         <TouchableOpacity
-          style={styles.connexionButton}
-          onPress={() => UserService.authenticate(this.state.email,this.state.password) ? 
-            this.dispAlert(
-              "Connexion réussie"
-            ):this.dispAlert("Identifiants erronés")
+          style={styles.button}
+          onPress={() =>
+            UserService.authenticate(this.state.login, this.state.password)
+              ? this.sendForm(this.state.login + '\n' + this.state.password)
+              : this.displayAlert('Identification erronée')
           }
         >
-          <Text style={styles.text}>Se connecter</Text>
+          <Text style={styles.textButton}>Se connecter</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => this.dispAlert('Mise à jour du mot de passe')}
-        >
-          <Text>Mot de passe oublié ?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.dispAlert('Inscription')}>
-          <Text>S'inscrire</Text>
-        </TouchableOpacity>
+        <View style={styles.alertContainer}>
+          <Text
+            style={styles.alert}
+            onPress={() => this.displayAlert('Mise à jour du mot de passe')}
+          >
+            Mot de passe oublié ?
+          </Text>
+          <Text
+            style={styles.alert}
+            onPress={() => this.displayAlert('Inscription')}
+          >
+            S'inscrire
+          </Text>
+        </View>
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  form: {
     justifyContent: 'space-evenly',
-    alignItems: 'center',
   },
-  connexionButton: {
+  button: {
     backgroundColor: 'skyblue',
-    borderRadius: 30,
+    height: 60,
     width: 300,
-    height: 50,
-    alignItems: 'center',
+    borderRadius: 35,
     justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
   },
-  text: {
+  alertContainer: {
+    alignItems: 'center',
+    margin: 20,
+  },
+  alert: {
+    padding: 10,
+    fontSize: 18,
+  },
+  textButton: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 18,
   },
 })

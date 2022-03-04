@@ -1,76 +1,51 @@
 import React, { Component } from 'react'
-import { Image, ImageSourcePropType } from 'react-native'
 import {
-  View,
-  TextInput,
-  Text,
   StyleSheet,
-  TouchableWithoutFeedbackBase,
+  TextInput,
+  View,
+  Image,
+  ImageSourcePropType,
 } from 'react-native'
 
-interface PropsType {
-  placeHolder: String
-  image : ImageSourcePropType ,
-  handleChange:Function
+interface CLassPropsType {
+  textForm: string
+  imagePath: ImageSourcePropType
+  modify: Function
+  security: boolean
 }
 
-
-
-export default class Input extends Component<PropsType> {
-  constructor(public props:PropsType) {
-    super(props)
-    this.state = {
-      name:"",
-    };
-  }
- 
+export default class InputContainer extends Component<CLassPropsType, {}> {
   render() {
     return (
-      <View>
-        <View style={styles.inputContainer}>
-          <Image source={this.props.image} style={styles.icon} />
-          <TextInput
-            style={styles.textInput}
-            placeholder={`${this.props.placeHolder}`}
-            onChange={(Event) =>
-              this.props.handleChange(Event.nativeEvent.text)
-            }
-          />
-        </View>
+      <View style={styles.logoinput}>
+        <Image style={styles.logo} source={this.props.imagePath} />
+        <TextInput
+          secureTextEntry={this.props.security}
+          style={styles.input}
+          placeholder={this.props.textForm}
+          onChange={(event) => {
+            this.props.modify(event.nativeEvent.text)
+          }}
+        ></TextInput>
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-
-  inputContainer: {
+  input: {
+    height: 70,
+    width: 275,
+    fontSize: 25,
+    justifyContent: 'center',
+  },
+  logoinput: {
     flexDirection: 'row',
-    width: 300,
-    height: 50,
-    padding: 20,
-    textAlign: 'center',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    borderRadius: 30,
     backgroundColor: 'white',
+    borderRadius: 35,
+    paddingLeft: 25,
+    margin: 25,
   },
-  nameOutput: {
-    marginTop: 20,
-    fontSize: 18,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    color: '#2980b9',
-  },
-  icon: {
-    width: 32,
-    height: 32,
-    marginRight: 10,
-    borderRadius:20,
-  },
-  textInput: {
-    flex: 1,
-    fontSize: 20,
-    height: 50,
-  },
+  logo: { width: 50, height: 50, marginRight: 15 },
 })
